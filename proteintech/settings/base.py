@@ -46,7 +46,7 @@ LOCAL_APPS = [
     "apps.common",
 ]
 
-AUTH_USER_MODEL = "accounts.User"
+# AUTH_USER_MODEL = "accounts.User"
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
@@ -86,14 +86,20 @@ WSGI_APPLICATION = 'proteintech.wsgi.application'
 
 DATABASES = {
     "default": {
-        "ENGINE": config("SQL_ENGINE"),
-        "NAME": config("SQL_DATABASE"),
-        "USER": config("SQL_USER"),
-        "PASSWORD": config("SQL_PASSWORD"),
-        "HOST": config("SQL_HOST"),
-        "PORT": config("SQL_PORT"),
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": "mydatabase",
     }
 }
+
+
+#     "default": {
+#         "ENGINE": config("SQL_ENGINE"),
+#         "NAME": config("SQL_DATABASE"),
+#         "USER": config("SQL_USER"),
+#         "PASSWORD": config("SQL_PASSWORD"),
+#         "HOST": config("SQL_HOST"),
+#         "PORT": config("SQL_PORT"),
+#     }
 
 
 # Password validation
