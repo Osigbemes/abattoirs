@@ -17,17 +17,17 @@ class User(AbstractBaseUser, PermissionsMixin):
     lastname = models.CharField(verbose_name=(_("Last Name")), max_length=200)
     email = models.EmailField(verbose_name=(_("Email")), unique=True)
     phone_number = models.CharField(max_length=25, null=True, blank=True)
-    active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=True)
     account_verified = models.BooleanField(default=False)
     account_verified_at = models.DateTimeField(null=True)
-    staff = models.BooleanField(default=False)  # a admin user
-    admin = models.BooleanField(default=False)  # a superuser
+    is_staff = models.BooleanField(default=False)  # a admin user
+    is_admin = models.BooleanField(default=False)  # a superuser
     is_identity_verified = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     # role = models.IntegerField()
     
-    REQUIRED_FIELDS = [firstname, lastname]
+    REQUIRED_FIELDS = ["firstname", "lastname", "phone_number"]
     USERNAME_FIELD = "email"
     
     objects = CustomUserManager()
