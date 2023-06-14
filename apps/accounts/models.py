@@ -42,6 +42,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     
     class Meta:
         ordering = ("-created_at",)
+        permissions = []
         
     @property    
     def get_full_name(self):
@@ -50,6 +51,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     @property    
     def get_short_name(self):
         return self.email
+    
+    @property
+    def get_user_permissions(self):
+        return [perm.codename for perm in self.user_permissions.all()]
     
     def has_perm(self, perm, obj=None):
         """Does the user have a specific permission?"""

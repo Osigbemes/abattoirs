@@ -3,10 +3,11 @@ from apps.accounts.models import User
 from apps.common.responses import CustomSuccessResponse, CustomErrorResponse
 
 class UserSerializer(serializers.ModelSerializer):
+    user_permissions = serializers.SerializerMethodField()
     
     class Meta:
         model = User
-        fields = '__all__'
+        fields = '__all__' #['permissions']
         extra_kwargs = {
             "password" : {
                     "write_only":True
@@ -18,3 +19,7 @@ class UserSerializer(serializers.ModelSerializer):
         if len(phone_number) < 11 or len(phone_number) > 11:
             return CustomErrorResponse({'Phone number':'Phone number is invalid!'})
         return super().validate(attrs)
+    
+    def get_user_permissions(self, obj):
+        
+        return [perm.codename for perm in obj.user_permissions.all()]
