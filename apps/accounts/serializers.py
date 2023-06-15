@@ -24,3 +24,14 @@ class CreateUserSerializer(BaseModelSerializer):
     def get_user_permissions(self, obj):
         
         return [perm.codename for perm in obj.user_permissions.all()]
+    
+class EmailSerializer(serializers.Serializer):
+    email = serializers.EmailField(max_length=255, required=True)
+
+    def validate_email(self, value):
+        return value.lower()
+
+
+class LoginSerializer(EmailSerializer):
+    email = serializers.EmailField(max_length=255, required=True)
+    password = serializers.CharField(required=True)

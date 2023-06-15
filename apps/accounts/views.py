@@ -1,13 +1,14 @@
-from rest_framework.views import APIView
+from rest_framework.views import APIView, status
 from rest_framework import generics, viewsets
 from apps.accounts.models import User
-from apps.accounts.serializers import CreateUserSerializer
+from apps.accounts.serializers import CreateUserSerializer, LoginSerializer
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.exceptions import NotFound
 from rest_framework.decorators import action
 from django.db import transaction
 from apps.accounts.services.user import UserService
+from apps.common.responses import CustomErrorResponse, CustomSuccessResponse
 
 class GeneralClassView(generics.ListCreateAPIView):
     queryset = User.objects.all()
@@ -57,7 +58,44 @@ class UserViewSet(viewsets.ModelViewSet):
                 "user": self.get_serializer(user).data
             }
 
-            return Response(data, status=201)
+            return CustomSuccessResponse(data, status=201)
+        
+    @action(
+    methods=["post"],
+    detail=False,
+    url_path="login",
+    permission_classes=[AllowAny]
+    )
+    def login(self, request, *args, **kwargs):
+        serializer = LoginSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        validated_data = serializer.validated_data
+        email= validated_data.get('email')
+        password = validated_data.get('password')
+        user_service = UserService()
+        user, token = user_service.Login(email, password)
+            
+        data = {
+            "access": token.get("access"),
+            "refresh": token.get("refresh"),
+            "user": self.get_serializer(user).data
+        }
+        return CustomSuccessResponse(data)    
+    
+    @action(
+    methods=["post"],
+    detail=False,
+    url_path="logout",
+    permission_classes=[IsAuthenticated]
+    )
+    def logout(self, request, *args, **kwargs):
+        try:
+            refresh_token = request.data["refresh_token"]
+            user_service = UserService()
+            user_service.logout(refresh_token)
+            return Response("You are logged out", status=status.HTTP_408_REQUEST_TIMEOUT)
+        except Exception as e:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
         
     @action(
     methods=["get"],
@@ -70,4 +108,14 @@ class UserViewSet(viewsets.ModelViewSet):
         data = self.get_serializer(user).data
         return Response(data)
     
+    @action(
+    methods=["get"],
+    detail=False,
+    url_path="get-user",
+    permission_classes=[IsAuthenticated]
+    )
+    def getUser(self, request, *args, **kwargs):
+        user = request.user
+        data = self.get_serializer(user).data
+        return CustomSuccessResponse(data)
     
