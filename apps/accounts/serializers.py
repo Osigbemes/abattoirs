@@ -1,8 +1,9 @@
 from rest_framework import serializers
 from apps.accounts.models import User
 from apps.common.responses import CustomSuccessResponse, CustomErrorResponse
+from apps.common.serializers import BaseModelSerializer
 
-class UserSerializer(serializers.ModelSerializer):
+class CreateUserSerializer(BaseModelSerializer):
     user_permissions = serializers.SerializerMethodField()
     
     class Meta:
