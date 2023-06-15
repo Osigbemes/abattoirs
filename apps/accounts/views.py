@@ -8,8 +8,12 @@ from rest_framework.exceptions import NotFound
 from rest_framework.decorators import action
 from django.db import transaction
 from apps.accounts.services.user import UserService
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.exceptions import TokenError
+from rest_framework_simplejwt.views import TokenBlacklistView, TokenObtainPairView, TokenRefreshView
 from apps.common.responses import CustomErrorResponse, CustomSuccessResponse
-
+from rest_framework_simplejwt.serializers import TokenBlacklistSerializer, TokenObtainPairSerializer, TokenRefreshSerializer
+    
 class GeneralClassView(generics.ListCreateAPIView):
     queryset = User.objects.all()
     serializer_class = CreateUserSerializer
@@ -119,3 +123,15 @@ class UserViewSet(viewsets.ModelViewSet):
         data = self.get_serializer(user).data
         return CustomSuccessResponse(data)
     
+    
+class LogoutView(TokenBlacklistView):
+    serializer_class = TokenBlacklistSerializer
+    
+    def post(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data)
+        try:
+            serializer.is_valid(raise_exception=True)
+            return Response({"message": "Logged out successfully.", "status": "success"}, status=status.HTTP_200_OK)
+        except TokenError:
+            return Response({"message": "Token is blacklisted.", "status": "failed"},
+                            status=status.HTTP_400_BAD_REQUEST)
