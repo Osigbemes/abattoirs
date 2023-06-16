@@ -7,6 +7,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from django.utils import timezone
 from django.db import transaction
 from django.contrib.auth import authenticate
+from django.contrib.auth.models import Group
 
 class UserService:
     
@@ -50,6 +51,17 @@ class UserService:
         token = self.GetTokenForUser()
         return self.user, token
     
+    @transaction.atomic
+    def CreateGroup(self, name):
+        if not Group.objects.filter(name=name).exists():
+            group = Group.objects.create(name=name)
+            return group
+        raise serializers.ValidationError(
+            {
+                {"name": ["this group name already exist"]}
+            }
+        )
+        
     def Login(self, email, password):
         user = authenticate(username=email, password=password)
         if user is None:

@@ -40,3 +40,20 @@ class EmailSerializer(serializers.Serializer):
 class LoginSerializer(EmailSerializer):
     email = serializers.EmailField(max_length=255, required=True)
     password = serializers.CharField(required=True)
+    
+class GroupSerializer(serializers.Serializer):
+    id = serializers.IntegerField(read_only=True)
+    name = serializers.CharField(required=True)
+    
+    class Meta:
+        extra_kwargs = {
+            "id" : {
+                    "read_only":True
+                }
+        }
+        
+    def update(self, instance, validated_data):
+        instance.name = validated_data['name']
+        instance.save()
+        return instance
+    

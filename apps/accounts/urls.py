@@ -15,5 +15,6 @@ urlpatterns = [
 
 router = routers.SimpleRouter(trailing_slash=False)
 router.register(r"accounts", views.UserViewSet)
+router.register(r"groups", views.GroupViewSet)
 
 urlpatterns += router.urls
