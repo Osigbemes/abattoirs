@@ -14,6 +14,8 @@ from rest_framework_simplejwt.views import TokenBlacklistView, TokenObtainPairVi
 from apps.common.responses import CustomErrorResponse, CustomSuccessResponse
 from rest_framework_simplejwt.serializers import TokenBlacklistSerializer, TokenObtainPairSerializer, TokenRefreshSerializer
     
+from apps.accounts.permissions import CustomPermisions   
+
 class GeneralClassView(generics.ListCreateAPIView):
     queryset = User.objects.all()
     serializer_class = CreateUserSerializer
@@ -102,14 +104,18 @@ class UserViewSet(viewsets.ModelViewSet):
             return Response(status=status.HTTP_400_BAD_REQUEST)
         
     @action(
-    methods=["get"],
+    methods=["post"],
     detail=False,
-    url_path="retrieve",
-    permission_classes=[AllowAny]
+    url_path="create-permissions",
+    permission_classes=[IsAuthenticated]
     )
-    def user_retrieve(self, request, *args, **kwargs):
+    def create_permission(self, request, *args, **kwargs):
         user = request.user
         data = self.get_serializer(user).data
+        instance = self.Meta.model(kwargs)
+        print (instance)
+        # permission_service = CustomPermisions
+        # permission = permission_service.create_permission("Add vet", "abattoir")
         return Response(data)
     
     @action(

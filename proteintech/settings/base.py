@@ -37,6 +37,7 @@ THIRD_PARTY_APPS = [
     "drf_spectacular",
     "cloudinary_storage",
     "cloudinary",
+    "rest_framework_simplejwt.token_blacklist",
     "rest_framework_simplejwt",
 ]
 

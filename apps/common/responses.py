@@ -3,8 +3,8 @@ from rest_framework.response import Response
 
 class CustomSuccessResponse(Response):
     def __init__(self, data, status=200, **kwargs):
-        resp = {"status": "success"}
-        resp.update(data)
+        resp = {"status": "success", "entity":data}
+        # resp.update(data)
         super().__init__(data=resp, status=status, **kwargs)
 
 

@@ -6,6 +6,7 @@ from rest_framework.response import Response
 
 class CreateUserSerializer(BaseModelSerializer):
     user_permissions = serializers.SerializerMethodField()
+    groups = serializers.SerializerMethodField()
     
     class Meta:
         model = User
@@ -21,6 +22,9 @@ class CreateUserSerializer(BaseModelSerializer):
         if len(phone_number) < 11 or len(phone_number) > 11:
             raise serializers.ValidationError({'Phone number':'Phone number is invalid!'})
         return super().validate(attrs)
+    
+    def get_groups(self, obj):
+        return [groups.name for groups in obj.groups.all()]
     
     def get_user_permissions(self, obj):
         
