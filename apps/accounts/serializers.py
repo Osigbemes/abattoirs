@@ -3,6 +3,7 @@ from apps.accounts.models import User
 from apps.common.responses import CustomSuccessResponse, CustomErrorResponse
 from apps.common.serializers import BaseModelSerializer
 from rest_framework.response import Response
+from django.contrib.auth.models import ContentType, Permission
 
 class CreateUserSerializer(BaseModelSerializer):
     user_permissions = serializers.SerializerMethodField()
@@ -56,4 +57,17 @@ class GroupSerializer(serializers.Serializer):
         instance.name = validated_data['name']
         instance.save()
         return instance
+    
+class PermissionSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Permission
+        fields = '__all__'
+        
+    
+class ContentTypeSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = ContentType
+        fields = '__all__'
     

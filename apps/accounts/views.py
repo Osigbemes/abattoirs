@@ -1,7 +1,7 @@
 from rest_framework.views import APIView, status
-from rest_framework import generics, viewsets
+from rest_framework import generics, viewsets, permissions, mixins
 from apps.accounts.models import User
-from apps.accounts.serializers import CreateUserSerializer, LoginSerializer, GroupSerializer
+from apps.accounts.serializers import CreateUserSerializer, LoginSerializer, GroupSerializer, ContentTypeSerializer, PermissionSerializer
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 from rest_framework.exceptions import NotFound
@@ -13,7 +13,7 @@ from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.views import TokenBlacklistView, TokenObtainPairView, TokenRefreshView
 from apps.common.responses import CustomErrorResponse, CustomSuccessResponse
 from rest_framework_simplejwt.serializers import TokenBlacklistSerializer, TokenObtainPairSerializer, TokenRefreshSerializer
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import Group, Permission, ContentType
 from apps.accounts.permissions import CustomPermisions   
 
 class GeneralClassView(generics.ListCreateAPIView):
@@ -165,6 +165,16 @@ class GroupViewSet(viewsets.ModelViewSet):
         except:
             return CustomErrorResponse({'Group':'Unable to create Group'})
         return CustomSuccessResponse(data, status = 201)
+   
+class PermissionViewSet(viewsets.ModelViewSet):
+    serializer_class = PermissionSerializer
+    queryset = Permission.objects.all()
+    permission_classes = [IsAuthenticated, IsAdminUser]
+    
+class ContentTypeViewSet(viewsets.ModelViewSet):
+    serializer_class = ContentTypeSerializer
+    queryset = ContentType.objects.all()
+    permission_classes = [IsAuthenticated, IsAdminUser]
     
 class LogoutView(TokenBlacklistView):
     serializer_class = TokenBlacklistSerializer
