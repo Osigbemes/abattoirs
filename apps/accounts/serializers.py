@@ -28,7 +28,14 @@ class CreateUserSerializer(BaseModelSerializer):
         return [groups.name for groups in obj.groups.all()]
     
     def get_user_permissions(self, obj):
-        
+        group_permissions = []
+        groups = obj.groups.all()
+        if groups is not None:
+            group_permissions.extend([perm.codename for perm in obj.user_permissions.all()])
+            for group in groups:
+                permissions = group.permissions.all()
+                group_permissions.extend([permission.codename for permission in permissions])
+            return group_permissions
         return [perm.codename for perm in obj.user_permissions.all()]
     
 class EmailSerializer(serializers.Serializer):
@@ -59,6 +66,9 @@ class GroupSerializer(serializers.Serializer):
         return instance
     
 class PermissionSerializer(serializers.ModelSerializer):
+    permissionId = serializers.IntegerField(required=False)
+    userId = serializers.UUIDField(required = False)
+    ids = serializers.PrimaryKeyRelatedField(many=True, queryset=Permission.objects.all(), required=False)
     
     class Meta:
         model = Permission

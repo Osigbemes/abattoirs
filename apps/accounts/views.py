@@ -64,7 +64,7 @@ class UserViewSet(viewsets.ModelViewSet):
                 "user": self.get_serializer(user).data
             }
 
-            return CustomSuccessResponse(data, status=201)
+            return CustomSuccessResponse(data=data, status=201)
         
     @action(
     methods=["post"],
@@ -86,7 +86,7 @@ class UserViewSet(viewsets.ModelViewSet):
             "refresh": token.get("refresh"),
             "user": self.get_serializer(user).data
         }
-        return CustomSuccessResponse(data)    
+        return CustomSuccessResponse(data=data, message='Logged in successfully')    
     
     @action(
     methods=["post"],
@@ -102,21 +102,6 @@ class UserViewSet(viewsets.ModelViewSet):
             return Response("You are logged out", status=status.HTTP_408_REQUEST_TIMEOUT)
         except Exception as e:
             return Response(status=status.HTTP_400_BAD_REQUEST)
-        
-    @action(
-    methods=["post"],
-    detail=False,
-    url_path="create-permissions",
-    permission_classes=[IsAuthenticated]
-    )
-    def create_permission(self, request, *args, **kwargs):
-        user = request.user
-        data = self.get_serializer(user).data
-        instance = self.Meta.model(kwargs)
-        print (instance)
-        # permission_service = CustomPermisions
-        # permission = permission_service.create_permission("Add vet", "abattoir")
-        return Response(data)
     
     @action(
     methods=["get"],
@@ -127,7 +112,7 @@ class UserViewSet(viewsets.ModelViewSet):
     def getUser(self, request, *args, **kwargs):
         user = request.user
         data = self.get_serializer(user).data
-        return CustomSuccessResponse(data)
+        return CustomSuccessResponse(data=data, message='')
     
     @action(
     methods=["post"],
@@ -143,7 +128,7 @@ class UserViewSet(viewsets.ModelViewSet):
             return CustomErrorResponse({'Unauthorized user':'You are not an admin.'})
         user_service = UserService()
         group = user_service.CreateGroup(request.name)
-        return CustomSuccessResponse(group, status = 201)
+        return CustomSuccessResponse(data=group, message= '',status = 201)
     
 class GroupViewSet(viewsets.ModelViewSet):
     serializer_class = GroupSerializer
@@ -163,14 +148,47 @@ class GroupViewSet(viewsets.ModelViewSet):
                 'name':group.name
             }
         except:
-            return CustomErrorResponse({'Group':'Unable to create Group'})
-        return CustomSuccessResponse(data, status = 201)
+            return CustomErrorResponse(data={},message='Unable to create Group')
+        return CustomSuccessResponse(data=data, message='Group created sucessfully', status = 201)
    
 class PermissionViewSet(viewsets.ModelViewSet):
     serializer_class = PermissionSerializer
-    queryset = Permission.objects.all()
+    queryset = Permission.objects.all().order_by('id')
     permission_classes = [IsAuthenticated, IsAdminUser]
     
+    @action(detail=False, methods=['post'], url_path="create-permission-for-user")
+    def create_permision_for_user(self, request, *args, **kwargs):
+        with transaction.atomic():
+            userId = request.data['userId']
+            permissionId = request.data['permissionId']
+            
+            user_service = UserService()
+            permission = user_service.create_permission_for_user(userId, permissionId)
+
+            data = {
+                'id':permission.id,
+                'name':permission.name,
+                'content_type_id':permission.content_type_id,
+                'codename':permission.codename,
+                'user':self.serializer_class(permission).data
+            }
+            return CustomSuccessResponse(data=data, message="permission created sucessfully")
+        
+    @action(detail=False, methods=['post'], url_path="create-permissions-for-user")
+    def create_permisions_for_user(self, request, *args, **kwargs):
+        with transaction.atomic():
+            if not request.data['ids']:
+                return CustomErrorResponse(data={}, message='ids cannot be none')
+                
+            userId = request.data['userId']
+            ids = request.data['ids']
+                
+            user_service = UserService()
+            user_service.create_permissions_for_user(userId, ids)
+
+            return CustomSuccessResponse(data={}, message='permissions created successfully!')
+        
+        
 class ContentTypeViewSet(viewsets.ModelViewSet):
     serializer_class = ContentTypeSerializer
     queryset = ContentType.objects.all()

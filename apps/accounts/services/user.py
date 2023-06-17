@@ -7,7 +7,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from django.utils import timezone
 from django.db import transaction
 from django.contrib.auth import authenticate
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import Group, Permission
 
 class UserService:
     
@@ -62,6 +62,52 @@ class UserService:
             }
         )
         
+    @transaction.atomic
+    def create_permission_for_user(self, userId, permissionId):
+        try:
+            user = User.objects.get(id=userId)
+            permission = Permission.objects.get(id=permissionId)
+            if user.has_perm(permission.codename):
+                raise serializers.ValidationError({
+                    "User":f"user already exist with this permission '{permission.codename}'"
+                })
+            user.user_permissions.add(permission)
+            user.save()
+            return permission
+            
+        except User.DoesNotExist:
+            raise serializers.ValidationError({
+                "User":f"user with this id {userId} does not exist"
+            })
+        except Permission.DoesNotExist:
+            raise serializers.ValidationError({
+                "Permission":f"Permission with this id {permissionId} does not exist"
+            })
+        except IntegrityError:
+            raise serializers.ValidationError({
+                "IntegrityError":"Unable to create permission"
+            })
+            
+    @transaction.atomic
+    def create_permissions_for_user(self, userId, ids):
+        try:
+            user = User.objects.get(id=userId)
+            
+            user.user_permissions.set(ids)
+            user.save()
+        except User.DoesNotExist:
+            raise serializers.ValidationError({
+                "User":f"user with this id {userId} does not exist"
+            })
+        except Permission.DoesNotExist:
+            raise serializers.ValidationError({
+                "Permission" : "Permission does not exist"
+            })
+        except IntegrityError:
+            raise serializers.ValidationError({
+                "IntegrityError":"Unable to create permission"
+            })
+            
     def Login(self, email, password):
         user = authenticate(username=email, password=password)
         if user is None:
