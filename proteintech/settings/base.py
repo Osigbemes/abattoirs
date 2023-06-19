@@ -192,22 +192,19 @@ SOCIAL_MEDIA_LINKEDIN_URL = "https://linkedin.com"
 SOCIAL_MEDIA_TWITTER_URL = "https://twitter.com"
 URL_PLACEHOLDERS = "https:/wecatech.com"
 
-# EMAIL_HOST = os.getenv("EMAIL_HOST")
-# EMAIL_SECURITY = os.getenv("EMAIL_SECURITY")
-# if EMAIL_SECURITY == "TLS":
-#     EMAIL_USE_TLS = True
-# if EMAIL_SECURITY == "SSL":
-#     EMAIL_USE_SSL = True
-# EMAIL_PORT = os.getenv("EMAIL_PORT")
-# EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
-# EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+EMAIL_HOST = config("EMAIL_HOST")
+EMAIL_PORT = config("EMAIL_PORT")
+EMAIL_HOST_USER = config("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
+EMAIL_BACKEND = config("EMAIL_BACKEND")
+EMAIL_USE_SSL = config("EMAIL_USE_SSL")
 
-EMAIL_BACKEND ='django.core.mail.backends.smtp.EmailBackend'
-EMAIL_USE_SSL = True
-EMAIL_HOST = 'smtp.mail.yahoo.com'
-EMAIL_PORT = 465
-EMAIL_HOST_USER = 'gbemilekeosinaike@yahoo.com' #os.environ.get('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = 'xyambfbkotzbshtr' #os.environ.get('EMAIL_HOST_PASSWORD')
+# EMAIL_BACKEND ='django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_USE_SSL = True
+# EMAIL_HOST = 'smtp.mail.yahoo.com'
+# EMAIL_PORT = 465
+# EMAIL_HOST_USER = 'gbemilekeosinaike@yahoo.com' #os.environ.get('EMAIL_HOST_USER')
+# EMAIL_HOST_PASSWORD = 'xyambfbkotzbshtr' #os.environ.get('EMAIL_HOST_PASSWORD')
 
 COMPANY_ADDRESS = os.getenv("COMPANY_ADDRESS")
 YEAR = timezone.now().year
