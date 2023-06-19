@@ -30,8 +30,8 @@ class UserViewSet(viewsets.ModelViewSet):
     serializer_class = CreateUserSerializer
     permission_classes = [AllowAny]
 
-    def list(self, request, *args, **kwargs):
-        raise NotFound()
+    # def list(self, request, *args, **kwargs):
+    #     raise NotFound()
 
     def create(self, request, *args, **kwargs):
         raise NotFound()
