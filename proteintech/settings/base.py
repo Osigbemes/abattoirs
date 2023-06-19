@@ -155,8 +155,17 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
+    ),
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Abattoirs API',
+    'DESCRIPTION': 'A project in the agricultural sector that vets protein consumption of consumers in different abattoirs',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': True,
+    # OTHER SETTINGS
 }
 
 SIMPLE_JWT = {

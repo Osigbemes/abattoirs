@@ -8,8 +8,10 @@ django-autoslug==1.9.8
 django-cloudinary-storage==0.3.0
 django-cors-headers==3.14.0
 django-jazzmin==2.6.0
+django-smtp-ssl==1.0
 django_debug_toolbar==3.8.1
 djangorestframework==3.14.0
+djangorestframework-simplejwt==5.2.2
 drf-spectacular==0.26.0
 drf-spectacular-sidecar==2023.3.1
 greenlet==2.0.2
