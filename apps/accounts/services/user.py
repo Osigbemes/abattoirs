@@ -49,7 +49,7 @@ class UserService:
                 {"email": ["this user already exist"]}
             )
         
-        send_email(email, " ", " ", " ")
+        send_email(email, "Welcome to protein tech", "click this link to verify your account", " ")
         self.user.refresh_from_db()
         token = self.GetTokenForUser()
         return self.user, token
