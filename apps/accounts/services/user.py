@@ -8,6 +8,7 @@ from django.utils import timezone
 from django.db import transaction
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import Group, Permission
+from apps.accounts.services.tasks import send_email
 
 class UserService:
     
@@ -47,6 +48,8 @@ class UserService:
             raise serializers.ValidationError(
                 {"email": ["this user already exist"]}
             )
+        
+        send_email(email, " ", " ", " ")
         self.user.refresh_from_db()
         token = self.GetTokenForUser()
         return self.user, token

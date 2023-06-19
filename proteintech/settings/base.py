@@ -1,6 +1,9 @@
 from datetime import timedelta
 from decouple import config
 from pathlib import Path
+from django.utils import timezone
+import os
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -182,3 +185,21 @@ SIMPLE_JWT = {
 
     'JTI_CLAIM': 'jti',
 }
+
+SOCIAL_MEDIA_INSTAGRAM_URL = "https://instagram.com"
+SOCIAL_MEDIA_FACEBOOK_URL = "https://facebook.com"
+SOCIAL_MEDIA_LINKEDIN_URL = "https://linkedin.com"
+SOCIAL_MEDIA_TWITTER_URL = "https://twitter.com"
+
+EMAIL_HOST = os.getenv("EMAIL_HOST")
+EMAIL_SECURITY = os.getenv("EMAIL_SECURITY")
+if EMAIL_SECURITY == "TLS":
+    EMAIL_USE_TLS = True
+if EMAIL_SECURITY == "SSL":
+    EMAIL_USE_SSL = True
+EMAIL_PORT = os.getenv("EMAIL_PORT")
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+
+COMPANY_ADDRESS = os.getenv("COMPANY_ADDRESS")
+YEAR = timezone.now().year
