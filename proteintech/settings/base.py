@@ -50,6 +50,7 @@ LOCAL_APPS = [
     "apps.animals",
     "apps.certificates",
     "apps.common",
+    "apps.utils",
 ]
 
 AUTH_USER_MODEL = "accounts.User"
