@@ -8,7 +8,6 @@ class Abattoir(BaseModel):
     operatingAddress = models.CharField(verbose_name=(_("Operating Address")), max_length=200)
     contactPhone = models.CharField(verbose_name=(_("Contact Phonenumber")), max_length=200)
     emailAddress = models.EmailField(verbose_name=(_("Email Address")), max_length=200)
-    name = models.CharField(verbose_name=(_("Abattoir Name")), max_length=200)
     accountNumber = models.CharField(verbose_name=(_("Account Number")), max_length=200)
     bankCode = models.CharField(verbose_name=(_("Bank Code")), max_length=200)
     bankName = models.CharField(verbose_name=(_("Bank Name")), max_length=200)

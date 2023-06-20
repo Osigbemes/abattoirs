@@ -5,10 +5,20 @@ from apps.abattoirs.models import Abattoir
 
 class IssueCertificateSerializer(serializers.ModelSerializer):
     
-    
     class Meta:
-        fields = ['abattoir', 'animalSpecie', 'typeOfParts', 'numberOfParts', 'dispatchedTo', 'serialNumberOfCarcass']
+        fields = '__all__'
         model = Certificate
+    
+class CertificateSerializer(serializers.ModelSerializer):
+        
+    class Meta:
+        fields = ['abattoir', 'animalSpecie', 'typeOfParts', 'numberOfParts', 'dispatchedTo', 'serialNumberOfCarcass', 'code']
+        model = Certificate
+        extra_kwargs = {
+            "code" : {
+                    "read_only":True
+                }
+        }
         
     def create(self, validated_data):
         user = self.request.user
@@ -20,14 +30,9 @@ class IssueCertificateSerializer(serializers.ModelSerializer):
                 abattoir = abattoir,
                 code = code,
                 issuedBy = user,
-                
+                **validated_data
             )
         except Abattoir.DoesNotExist:
             raise serializers.ValidationError({'abattoir':f'abattoir with this id {abattoir_id} does not exist'})
         
         return super().create(validated_data)
-    
-class CertificateSerializer(serializers.ModelSerializer):
-    class Meta:
-        fields = '__all__'
-        model = Certificate
