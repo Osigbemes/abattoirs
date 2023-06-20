@@ -22,8 +22,9 @@ def generate_certificate(request):
     c.drawString(100, 600, "has successfully completed the course")
 
     # Add an image to the PDF
-    image_path = f"{settings.STATIC_URL}verified.png"
-    c.drawInlineImage(image_path, 100, 400, width=200, height=200)
+    # image_path = f"{settings.STATIC_URL}images/verified.png"
+    # print (image_path)
+    c.drawInlineImage('verified.png', 100, 400, width=200, height=200)
 
     # Save the PDF and close the canvas
     c.save()
