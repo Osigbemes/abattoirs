@@ -6,7 +6,7 @@ from apps.certificates.serializers import IssueCertificateSerializer, Certificat
 from apps.certificates.models import Certificate
 from rest_framework.exceptions import NotFound
 from rest_framework.decorators import action
-from apps.utils.services.certificate import generate_certificate, generate_certificate_for_abattoir
+from apps.utils.services.certificate import generate_certificate
 from rest_framework.response import Response
 
 class IssueCertificateViewSet(viewsets.ModelViewSet):

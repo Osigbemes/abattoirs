@@ -6,6 +6,7 @@ from io import BytesIO
 import os
 from django.http import HttpResponse
 from reportlab.pdfgen import canvas
+from django.conf import settings
 
 def generate_certificate(request):
     # Create a PDF document
@@ -21,68 +22,10 @@ def generate_certificate(request):
     c.drawString(100, 600, "has successfully completed the course")
 
     # Add an image to the PDF
-    c.drawInlineImage('logo.png', 100, 400, width=200, height=200)
+    image_path = f"{settings.STATIC_URL}verified.png"
+    c.drawInlineImage(image_path, 100, 400, width=200, height=200)
 
     # Save the PDF and close the canvas
     c.save()
 
     return response
-
-
-# def generate_certificate(certificate_data):
-#     doc = SimpleDocTemplate("certificate.pdf", pagesize=letter)
-
-#     # Add content to the PDF
-#     story = []
-#     styles = getSampleStyleSheet()
-    
-#     # Add image to the PDF
-#     # image_path = os.path.join(static_dir, 'images', 'logo.png')
-#     image_path = 'logo.png'
-#     image = Image(image_path, width=2.5*inch, height=2.5*inch)
-#     story.append(image)
-    
-#     # Add text to the PDF
-#     recipient_name = certificate_data['recipient_name']
-#     text = f"Certificate of Achievement\n\nThis is to certify that {recipient_name} has successfully completed the course."
-#     paragraph = Paragraph(text, styles["BodyText"])
-#     story.append(paragraph)
-
-#     doc.build(story)
-
-#     return "certificate.pdf"
-
-def generate_certificate_for_abattoir(certificate_data):
-    pdf_buffer = BytesIO()
-    doc = SimpleDocTemplate(pdf_buffer, pagesize=letter)
-
-    # Add content to the PDF
-    story = []
-    styles = getSampleStyleSheet()
-    
-    # Add image to the PDF
-    image_path = 'logo.png'
-    image = Image(image_path, width=2.5*inch, height=2.5*inch)
-    story.append(image)
-    
-    # Add text to the PDF
-    recipient_name = certificate_data['recipient_name']
-    text = f"Certificate of Achievement\n\nThis is to certify that {recipient_name} has successfully completed the course."
-    paragraph = Paragraph(text, styles["BodyText"])
-    story.append(paragraph)
-
-
-    doc.build(story)
-
-    pdf_buffer.seek(0)
-    return pdf_buffer
-
-generate_certificate({'recipient_name':'osigbemes'})
-
-# def find_missing_number(num, *array):
-#     if num in array:
-#         return num
-#     print (num in array)
-#     print ('number not found')
-    
-# find_missing_number(3, ([1,2,3,4,5,6]))
