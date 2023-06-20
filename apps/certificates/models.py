@@ -5,7 +5,7 @@ from apps.abattoirs.models import Abattoir
 
 class Certificate(BaseModel):
     code = models.CharField(verbose_name=(_("Certificate code")), max_length=200)
-    issuedBy = models.UUIDField(verbose_name=(_("Issues By")), max_length=200)
+    issuedBy = models.UUIDField(verbose_name=(_("Issued By")), max_length=200)
     abattoir = models.OneToOneField(Abattoir, on_delete=models.CASCADE, related_name="abattoir")
     beefWeightInKg = models.DecimalField(max_digits=4, decimal_places=3)
     # distributor = models.OneToOneField(Distributor, on_delete=models.CASCADE, related_name="distributor")
@@ -23,4 +23,4 @@ class Certificate(BaseModel):
         verbose_name_plural = _("Certificates")
         
     def __str__(self):
-        return self.name
+        return self.abattoir.name

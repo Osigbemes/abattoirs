@@ -12,7 +12,7 @@ class IssueCertificateSerializer(serializers.ModelSerializer):
 class CertificateSerializer(serializers.ModelSerializer):
         
     class Meta:
-        fields = ['abattoir', 'animalSpecie', 'typeOfParts', 'numberOfParts', 'dispatchedTo', 'serialNumberOfCarcass', 'code']
+        fields = ['abattoir', 'animalSpecie', 'typeOfParts', 'numberOfParts', 'dispatchedTo', 'serialNumberOfCarcass', 'code', 'beefWeightInKg']
         model = Certificate
         extra_kwargs = {
             "code" : {
@@ -21,15 +21,16 @@ class CertificateSerializer(serializers.ModelSerializer):
         }
         
     def create(self, validated_data):
-        user = self.request.user
+        user = self.context.get('request').user
         abattoir_id = validated_data['abattoir']
         try:
-            abattoir = Abattoir.objects.get(id = abattoir_id)
+            abattoir = Abattoir.objects.get(id = abattoir_id.id)
+            validated_data.pop('abattoir', None)
             code = generate_code()
             Certificate.objects.create(
                 abattoir = abattoir,
                 code = code,
-                issuedBy = user,
+                issuedBy = user.id,
                 **validated_data
             )
         except Abattoir.DoesNotExist:

@@ -14,6 +14,7 @@ class IssueCertificateViewSet(viewsets.ModelViewSet):
     queryset = Certificate.objects.all()
     permission_classes = [AllowAny]
     serializer_class = IssueCertificateSerializer
+    lookup_field = 'pk'
 
     def list(self, request, *args, **kwargs):
         raise NotFound()
@@ -26,8 +27,8 @@ class IssueCertificateViewSet(viewsets.ModelViewSet):
     
     @action(
     methods=["get"],
-    detail=False,
-    url_path="download_certificate/<int:pk>",
+    detail=True,
+    url_path="",
     permission_classes=[IsAuthenticated]
     )
     def get_certificate(self, request, pk):
@@ -50,8 +51,5 @@ class IssueCertificateViewSet(viewsets.ModelViewSet):
     
 class CertificateViewSet(viewsets.ModelViewSet):
     queryset = Certificate.objects.all()
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     serializer_class = CertificateSerializer
-    
-    def create(self, request, *args, **kwargs):
-        raise NotFound()
