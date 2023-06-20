@@ -12,7 +12,7 @@ def generate_certificate(certificate_data):
     styles = getSampleStyleSheet()
     
     # Add image to the PDF
-    image_path = 'path_to_your_image.png'
+    image_path = 'logos.logo.png'
     image = Image(image_path, width=2.5*inch, height=2.5*inch)
     story.append(image)
     
@@ -35,7 +35,7 @@ def generate_certificate_for_abattoir(certificate_data):
     styles = getSampleStyleSheet()
     
     # Add image to the PDF
-    image_path = 'path_to_your_image.png'
+    image_path = 'logos.logo.png'
     image = Image(image_path, width=2.5*inch, height=2.5*inch)
     story.append(image)
     
