@@ -50,3 +50,5 @@ def generate_certificate_for_abattoir(certificate_data):
 
     pdf_buffer.seek(0)
     return pdf_buffer
+
+generate_certificate({'recipient_name':'osigbemes'})

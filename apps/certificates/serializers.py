@@ -5,10 +5,9 @@ from apps.abattoirs.models import Abattoir
 
 class IssueCertificateSerializer(serializers.ModelSerializer):
     
-    #insert issuedBy, code from the code
     
     class Meta:
-        fields = ['abattoir']
+        fields = ['abattoir', 'animalSpecie', 'typeOfParts', 'numberOfParts', 'dispatchedTo', 'serialNumberOfCarcass']
         model = Certificate
         
     def create(self, validated_data):
@@ -17,13 +16,18 @@ class IssueCertificateSerializer(serializers.ModelSerializer):
         try:
             abattoir = Abattoir.objects.get(id = abattoir_id)
             code = generate_code()
-            certificate = Certificate.objects.create(
+            Certificate.objects.create(
                 abattoir = abattoir,
                 code = code,
                 issuedBy = user,
                 
             )
         except Abattoir.DoesNotExist:
-            raise serializers.ValidationError()
+            raise serializers.ValidationError({'abattoir':f'abattoir with this id {abattoir_id} does not exist'})
         
         return super().create(validated_data)
+    
+class CertificateSerializer(serializers.ModelSerializer):
+    class Meta:
+        fields = '__all__'
+        model = Certificate

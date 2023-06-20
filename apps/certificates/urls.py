@@ -7,6 +7,7 @@ urlpatterns = [
 ]
 
 router = routers.SimpleRouter(trailing_slash=False)
+router.register(r"issue", IssueCertificateViewSet)
 router.register(r"", CertificateViewSet)
 
 urlpatterns += router.urls

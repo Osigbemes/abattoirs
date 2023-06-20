@@ -14,7 +14,7 @@ class Certificate(BaseModel):
     typeOfPackaging = models.CharField(verbose_name=(_("Types Of Packaging")), max_length=200)
     numberOfParts = models.IntegerField(verbose_name=(_("Number Of Parts")))
     identificationMark = models.CharField(max_length=200)
-    dispatchedTo = models.CharField(max_length=200)
+    dispatchedTo = models.CharField(verbose_name=(_("Dispatched To")), max_length=200)
     serialNumberOfCarcass = models.CharField(max_length=200)
     dispatchedTo = models.CharField(max_length=200)
     
