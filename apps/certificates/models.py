@@ -2,10 +2,11 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from apps.common.models import BaseModel
 from apps.abattoirs.models import Abattoir
+from apps.accounts.models import User
 
 class Certificate(BaseModel):
     code = models.CharField(verbose_name=(_("Certificate code")), max_length=200)
-    issuedBy = models.UUIDField(verbose_name=(_("Issued By")), max_length=200)
+    issuedBy = models.OneToOneField(User, on_delete=models.CASCADE, related_name="user", verbose_name=(_("Issued By")), max_length=200)
     abattoir = models.OneToOneField(Abattoir, on_delete=models.CASCADE, related_name="abattoir")
     beefWeightInKg = models.DecimalField(max_digits=4, decimal_places=3)
     # distributor = models.OneToOneField(Distributor, on_delete=models.CASCADE, related_name="distributor")
