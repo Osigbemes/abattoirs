@@ -9,6 +9,7 @@ from django.db import transaction
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import Group, Permission
 from apps.accounts.services.tasks import send_email
+from apps.common.responses import SerializerCustomErrorResponse
 
 class UserService:
     
@@ -79,17 +80,12 @@ class UserService:
             return permission
             
         except User.DoesNotExist:
-            raise serializers.ValidationError({
-                "User":f"user with this id {userId} does not exist"
-            })
+            SerializerCustomErrorResponse(message="user does not exist")
+            
         except Permission.DoesNotExist:
-            raise serializers.ValidationError({
-                "Permission":f"Permission with this id {permissionId} does not exist"
-            })
+            SerializerCustomErrorResponse(message=f"Permission with this id {permissionId} does not exist")
         except IntegrityError:
-            raise serializers.ValidationError({
-                "IntegrityError":"Unable to create permission"
-            })
+            SerializerCustomErrorResponse(message="Unable to create permission")
             
     @transaction.atomic
     def create_permissions_for_user(self, userId, ids):
