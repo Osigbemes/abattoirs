@@ -41,7 +41,8 @@ class IssueCertificateViewSet(viewsets.ModelViewSet):
                 'beefWeightInKg':certificate.beefWeightInKg,
                 'animalSpecie':certificate.animalSpecie,
                 'dispatchedTo':certificate.dispatchedTo,
-                'code':certificate.code
+                'code':certificate.code,
+                'date_issued':certificate.created_at
             }
         except Certificate.DoesNotExist:
             return CustomErrorResponse(data={}, message="Certificate does not exist")

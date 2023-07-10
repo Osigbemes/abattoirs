@@ -21,6 +21,7 @@ def generate_certificate(request, abattoir):
     animalSpecie = abattoir['animalSpecie']
     dispatchedTo = abattoir['dispatchedTo']
     code = abattoir['code']
+    date_issued = abattoir['date_issued']
     
     # Create a PDF document
     response = HttpResponse(content_type='application/pdf')
@@ -75,10 +76,16 @@ def generate_certificate(request, abattoir):
     animalSpecie_name_paragraph.drawOn(c, 100, 500)
     
     dispatchedTo_name_style = ParagraphStyle(name='NameStyle', parent=text_style, fontSize=15)
-    dispatchedTo_name_text = f'Animal Specie: <b>{dispatchedTo}</b>'
+    dispatchedTo_name_text = f'Dispatched To: <b>{dispatchedTo}</b>'
     dispatchedTo_name_paragraph = Paragraph(dispatchedTo_name_text, dispatchedTo_name_style)
     dispatchedTo_name_paragraph.wrapOn(c, 200, 200)
     dispatchedTo_name_paragraph.drawOn(c, 100, 460)
+    
+    date_issued_name_style = ParagraphStyle(name='NameStyle', parent=text_style, fontSize=15)
+    date_issued_name_text = f'Certificate Issue Date: <b>{date_issued.strftime("%B %d, %Y")}</b>'
+    date_issued_name_paragraph = Paragraph(date_issued_name_text, date_issued_name_style)
+    date_issued_name_paragraph.wrapOn(c, 200, 200)
+    date_issued_name_paragraph.drawOn(c, 100, 415)
 
     # Add an image to the PDF
     image_path = f"{settings.STATIC_URL}images/verified.png"
