@@ -88,7 +88,7 @@ def generate_certificate(request, abattoir):
     date_issued_name_paragraph.drawOn(c, 100, 415)
 
     # Add an image to the PDF
-    image_path = f"{settings.STATIC_URL}images/verified.png"
+    image_path = f"{settings.STATIC_URL}images/verified-logo.png"
     image_path = image_path.lstrip('/')
     c.drawInlineImage(image_path, 250, 700, width=100, height=100)
     
