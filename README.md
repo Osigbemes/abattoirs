@@ -4,4 +4,4 @@ A project in the agricultural sector that checks the protein consumption of cons
 https://documenter.getpostman.com/view/15795679/2s93shzVTy link to the postman documentation.
 
 Certificate builder:
-![Alt text](image.png)
+![image](https://github.com/Osigbemes/abattoirs/assets/45717037/11f7398e-3ca5-4bd4-b2dc-b2e2555d6403)
