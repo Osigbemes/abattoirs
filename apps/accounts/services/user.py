@@ -8,7 +8,7 @@ from django.utils import timezone
 from django.db import transaction
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import Group, Permission
-from apps.accounts.services.tasks import send_email
+from apps.accounts.services.tasks import send_email, send_verification_email
 from apps.common.responses import SerializerCustomErrorResponse
 
 class UserService:
@@ -50,6 +50,7 @@ class UserService:
                 {"email": ["this user already exist"]}
             )
         
+        send_verification_email.delay(email)
         send_email(email, "Welcome to protein tech", "click this link to verify your account", " ")
         self.user.refresh_from_db()
         token = self.GetTokenForUser()
