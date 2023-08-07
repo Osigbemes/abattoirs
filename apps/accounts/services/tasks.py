@@ -26,16 +26,17 @@ def send_email(email, content_heading, content_body, detail_area):
 
 @app.task
 def send_verification_email(email):
-    user = User.objects.get(email=email)
-    print(user)
+    logging.info(f'Email about to be sent.............{email}')
     try:
         send_mail(
-            'Verify your QuickPublisher account',
+            'Verify your ProteinTech account',
             'Follow this link to verify your account: '
-                'http://localhost:8000%s' % reverse('verify', kwargs={'uuid': str(user.id)}),
-            'from@quickpublisher.dev',
-            [user.email],
+                'http://localhost:8000%s' % str(email),
+            "ProteinTech <{}>".format(settings.EMAIL_HOST_USER),
+            [email],
             fail_silently=False,
         )
+    except Exception as err:
+        logging.warning(f'{err}')
     except User.DoesNotExist:
-        logging.warning("Tried to send verification email to non-existing user '%s'" % user.email)
+        logging.warning("Tried to send verification email to non-existing user '%s'" % email)
