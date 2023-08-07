@@ -4,6 +4,14 @@ from pathlib import Path
 from django.utils import timezone
 import os
 
+
+# REDIS related settings 
+REDIS_HOST = '127.0.0.1' 
+REDIS_PORT = '6379' 
+BROKER_URL = 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/0' 
+BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 3600} 
+CELERY_RESULT_BACKEND = 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/0'
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -14,7 +22,6 @@ SECRET_KEY = config("SECRET_KEY")
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 

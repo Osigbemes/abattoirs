@@ -26,15 +26,16 @@ def send_email(email, content_heading, content_body, detail_area):
 
 @app.task
 def send_verification_email(email):
+    user = User.objects.get(email=email)
+    print(user)
     try:
-        user = User.objects.get(email=email)
         send_mail(
             'Verify your QuickPublisher account',
             'Follow this link to verify your account: '
-                'http://localhost:8000%s' % reverse('verify', kwargs={'uuid': str(user.verification_uuid)}),
+                'http://localhost:8000%s' % reverse('verify', kwargs={'uuid': str(user.id)}),
             'from@quickpublisher.dev',
             [user.email],
             fail_silently=False,
         )
     except User.DoesNotExist:
-        logging.warning("Tried to send verification email to non-existing user '%s'" % user_id)
+        logging.warning("Tried to send verification email to non-existing user '%s'" % user.email)
